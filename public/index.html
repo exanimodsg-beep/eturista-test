@@ -416,3 +416,49 @@
 
 </body>
 </html>
+
+<script>
+  // Polling — proveri svake 2 sekunde da li ima novih podataka
+  let lastSeenTimestamp = null;
+
+  async function pollForData() {
+    try {
+      const url = lastSeenTimestamp
+        ? `/latest?since=${encodeURIComponent(lastSeenTimestamp)}`
+        : '/latest';
+
+      const res = await fetch(url);
+      const json = await res.json();
+
+      if (json.hasData) {
+        lastSeenTimestamp = json.timestamp;
+        fillForm(json.data);
+
+        // Notify server that form received the data
+        await fetch('/confirm', { method: 'POST' });
+
+        // Visual notification
+        showNotification();
+      }
+    } catch (e) {
+      console.error('Polling greška:', e);
+    }
+  }
+
+  function showNotification() {
+    const notif = document.createElement('div');
+    notif.style.cssText = `
+      position: fixed; top: 20px; right: 20px; z-index: 999;
+      background: #00a850; color: white; padding: 14px 20px;
+      border-radius: 8px; font-size: 15px; font-weight: bold;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      animation: slideIn 0.3s ease;
+    `;
+    notif.textContent = '✅ Podaci primljeni — forma popunjena!';
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 4000);
+  }
+
+  // Start polling every 2 seconds
+  setInterval(pollForData, 2000);
+</script>
