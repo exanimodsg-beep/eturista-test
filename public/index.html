@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eTurist — Test Prijava</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    color: #333;
+  }
+  .header {
+    background: #0057a8;
+    color: white;
+    padding: 14px 30px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .header img { height: 40px; }
+  .header h1 { font-size: 20px; font-weight: bold; }
+  .header p { font-size: 13px; opacity: 0.85; }
+  .container { max-width: 900px; margin: 30px auto; padding: 0 16px 60px; }
+  .section {
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .section-header {
+    background: #f7f7f7;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-number {
+    background: #0057a8;
+    color: white;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .section-number.done { background: #e0e0e0; color: #999; }
+  .section-title { font-size: 16px; font-weight: bold; color: #333; }
+  .section-body { padding: 24px 20px; }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label {
+    font-size: 13px;
+    color: #555;
+  }
+  .form-group label .req { color: #c00; }
+  .form-group input,
+  .form-group select {
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background: white;
+    transition: border-color 0.2s;
+    height: 40px;
+  }
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #0057a8;
+    outline: none;
+  }
+  .form-group input.filled,
+  .form-group select.filled {
+    background: #f0f7ff;
+    border-color: #0057a8;
+  }
+  .btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+  .btn {
+    padding: 10px 28px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+  }
+  .btn-save {
+    background: #00a850;
+    color: white;
+  }
+  .btn-save:hover { background: #008f44; }
+  .btn-cancel {
+    background: white;
+    color: #c00;
+    border: 1px solid #c00;
+  }
+  .btn-cancel:hover { background: #fff0f0; }
+
+  /* Success overlay */
+  .success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .success-overlay.show { display: flex; }
+  .success-box {
+    background: white;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .success-icon { font-size: 56px; margin-bottom: 16px; }
+  .success-box h2 { font-size: 22px; color: #00a850; margin-bottom: 8px; }
+  .success-box p { color: #666; font-size: 14px; }
+  .success-box button {
+    margin-top: 24px;
+    padding: 10px 32px;
+    background: #0057a8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* Flash animation when field is filled */
+  @keyframes flashFill {
+    0% { background: #fffbe6; }
+    100% { background: #f0f7ff; }
+  }
+  .flash { animation: flashFill 0.5s ease; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>eTurist — TEST OKRUŽENJE</h1>
+    <p>Prijava turista | Ministarstvo turizma Srbije</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: Osnovni podaci -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">Osnovni podaci</div>
+    </div>
+    <div class="section-body">
+
+      <div class="form-row single">
+        <div class="form-group">
+          <label for="tipLica">Tip lica <span class="req">*</span></label>
+          <select id="tipLica">
+            <option value="">— Izaberite —</option>
+            <option value="domaci">Domaći državljanin</option>
+            <option value="strani">Strani državljanin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ime">Ime <span class="req">*</span></label>
+          <input type="text" id="ime" placeholder="Ime">
+        </div>
+        <div class="form-group">
+          <label for="prezime">Prezime <span class="req">*</span></label>
+          <input type="text" id="prezime" placeholder="Prezime">
+        </div>
+      </div>
+
+      <div class="form-row single">
+        <div class="form-group">
+          <label for="datumRodjenja">Datum rođenja <span class="req">*</span></label>
+          <input type="text" id="datumRodjenja" placeholder="DD.MM.YYYY">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pol">Pol <span class="req">*</span></label>
+          <select id="pol">
+            <option value="">— Izaberite —</option>
+            <option value="M">Muški</option>
+            <option value="F">Ženski</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="jmbg">JMBG / Broj dokumenta</label>
+          <input type="text" id="jmbg" placeholder="JMBG ili broj dokumenta">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="drzavaRodjenja">Država rođenja <span class="req">*</span></label>
+          <select id="drzavaRodjenja">
+            <option value="">— Izaberite —</option>
+            <option value="SRB">Srbija</option>
+            <option value="BIH">Bosna i Hercegovina</option>
+            <option value="CRO">Hrvatska</option>
+            <option value="MNE">Crna Gora</option>
+            <option value="MKD">Severna Makedonija</option>
+            <option value="SVN">Slovenija</option>
+            <option value="DEU">Nemačka</option>
+            <option value="AUT">Austrija</option>
+            <option value="GBR">Velika Britanija</option>
+            <option value="FRA">Francuska</option>
+            <option value="ITA">Italija</option>
+            <option value="USA">SAD</option>
+            <option value="RUS">Rusija</option>
+            <option value="CHN">Kina</option>
+            <option value="OTHER">Ostalo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="drzavaPrebivalista">Država prebivališta</label>
+          <select id="drzavaPrebivalista">
+            <option value="SRB">Srbija</option>
+            <option value="BIH">Bosna i Hercegovina</option>
+            <option value="CRO">Hrvatska</option>
+            <option value="MNE">Crna Gora</option>
+            <option value="DEU">Nemačka</option>
+            <option value="AUT">Austrija</option>
+            <option value="GBR">Velika Britanija</option>
+            <option value="FRA">Francuska</option>
+            <option value="ITA">Italija</option>
+            <option value="USA">SAD</option>
+            <option value="OTHER">Ostalo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="opstinaPrebivalista">Opština prebivališta <span class="req">*</span></label>
+          <select id="opstinaPrebivalista">
+            <option value="">— Izaberite —</option>
+            <option value="BGD">Beograd</option>
+            <option value="NS">Novi Sad</option>
+            <option value="NIS">Niš</option>
+            <option value="KG">Kragujevac</option>
+            <option value="ZAJ">Zaječar</option>
+            <option value="BOR">Bor</option>
+            <option value="KV">Kraljevo</option>
+            <option value="UZ">Užice</option>
+            <option value="OTHER">Ostalo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mestoPrebivalista">Mesto prebivališta <span class="req">*</span></label>
+          <input type="text" id="mestoPrebivalista" placeholder="Mesto">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 2: Podaci o boravku -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number done">2</div>
+      <div class="section-title">Podaci o boravku</div>
+    </div>
+    <div class="section-body">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="objekat">Ugostiteljski objekat <span class="req">*</span></label>
+          <select id="objekat">
+            <option value="">— Izaberite —</option>
+            <option value="soko" selected>Soko Grad</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="vrstaUsluga">Vrsta pruženih usluga <span class="req">*</span></label>
+          <select id="vrstaUsluga">
+            <option value="">— Izaberite —</option>
+            <option value="nocenje">Noćenje sa doručkom</option>
+            <option value="polupansion">Polupansion</option>
+            <option value="pansion">Puni pansion</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row single">
+        <div class="form-group">
+          <label for="nacinDolaska">Način dolaska <span class="req">*</span></label>
+          <select id="nacinDolaska">
+            <option value="">— Izaberite —</option>
+            <option value="auto">Automobilom</option>
+            <option value="avion">Avionom</option>
+            <option value="voz">Vozom</option>
+            <option value="bus">Autobusom</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row single">
+        <div class="form-group">
+          <label for="motivDolaska">Primarni motiv dolaska <span class="req">*</span></label>
+          <select id="motivDolaska">
+            <option value="">— Izaberite —</option>
+            <option value="odmor">Odmor i rekreacija</option>
+            <option value="posao">Poslovno putovanje</option>
+            <option value="tranzit">Tranzit</option>
+            <option value="zdravlje">Zdravstveni turizam</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row triple">
+        <div class="form-group">
+          <label for="datumDolaska">Datum dolaska <span class="req">*</span></label>
+          <input type="text" id="datumDolaska" placeholder="DD.MM.YYYY">
+        </div>
+        <div class="form-group">
+          <label for="casДolaska">Čas dolaska <span class="req">*</span></label>
+          <input type="text" id="casDolaska" placeholder="HH:MM">
+        </div>
+        <div class="form-group">
+          <label for="datumOdlaska">Planirani datum odlaska <span class="req">*</span></label>
+          <input type="text" id="datumOdlaska" placeholder="DD.MM.YYYY">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-cancel" onclick="resetForm()">Napusti stranicu</button>
+      <button class="btn btn-save" onclick="saveForm()">Sačuvaj</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="success-icon">✅</div>
+    <h2>Prijava uspešna!</h2>
+    <p>Gost je uspešno prijavljen u sistemu.</p>
+    <button onclick="resetForm()">Nova prijava</button>
+  </div>
+</div>
+
+<script>
+  // Fill form function — called by Playwright
+  function fillForm(data) {
+    function setField(id, value) {
+      const el = document.getElementById(id);
+      if (!el || !value) return;
+      el.value = value;
+      el.classList.add('filled', 'flash');
+      setTimeout(() => el.classList.remove('flash'), 600);
+    }
+
+    setField('ime', data.first_name);
+    setField('prezime', data.last_name);
+    setField('datumRodjenja', data.date_of_birth);
+    setField('jmbg', data.passport_number);
+    setField('pol', data.gender);
+    setField('datumDolaska', data.arrival_date);
+    setField('casDolaska', data.arrival_time);
+
+    // Tip lica — domestic or foreign
+    if (data.nationality === 'Srpsko' || data.nationality === 'Serbian') {
+      setField('tipLica', 'domaci');
+    } else {
+      setField('tipLica', 'strani');
+    }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function saveForm() {
+    document.getElementById('successOverlay').classList.add('show');
+  }
+
+  function resetForm() {
+    document.getElementById('successOverlay').classList.remove('show');
+    document.querySelectorAll('input').forEach(i => { i.value = ''; i.classList.remove('filled'); });
+    document.querySelectorAll('select').forEach(s => { s.selectedIndex = 0; s.classList.remove('filled'); });
+  }
+</script>
+
+</body>
+</html>
