@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: eturist-test
+    env: node
+    buildCommand: npm install && npx playwright install chromium --with-deps
+    startCommand: node server.js
+    envVars:
+      - key: BASE_URL
+        sync: false
+      - key: PORT
+        value: 3000
