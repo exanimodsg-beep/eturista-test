@@ -280,6 +280,12 @@
           <label for="mestoPrebivalista">Mesto prebivališta <span class="req">*</span></label>
           <input type="text" id="mestoPrebivalista" placeholder="Mesto">
         </div>
+       <div class="form-row single">
+  <div class="form-group">
+    <label for="adresa">Adresa <span class="req">*</span></label>
+    <input type="text" id="adresa" placeholder="Ulica i broj">
+  </div>
+</div>
       </div>
 
     </div>
@@ -385,12 +391,17 @@
     }
 
     setField('ime', data.first_name);
-    setField('prezime', data.last_name);
-    setField('datumRodjenja', data.date_of_birth);
-    setField('jmbg', data.passport_number);
-    setField('pol', data.gender);
-    setField('datumDolaska', data.arrival_date);
-    setField('casDolaska', data.arrival_time);
+setField('prezime', data.last_name);
+setField('datumRodjenja', data.date_of_birth);
+setField('jmbg', data.passport_number);
+setField('pol', data.gender);
+setField('datumDolaska', data.arrival_date);
+setField('casDolaska', data.arrival_time);
+setField('mestoPrebivalista', data.city);
+setField('opstinaPrebivalista', data.municipality);
+setField('drzavaRodjenja', data.birth_country);
+setField('mestoPrebivalista', data.city);
+setField('adresa', data.address);
 
     // Tip lica — domestic or foreign
     if (data.nationality === 'Srpsko' || data.nationality === 'Serbian') {
