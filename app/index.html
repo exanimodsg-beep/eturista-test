@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1a2e1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Exanimo Prijava">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/app/manifest.json">
+<link rel="apple-touch-icon" href="/app/icons/icon-192.png">
+<title>Exanimo Prijava</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-deep: #1a2e1a;
+  --green-mid: #2d4a2d;
+  --green-accent: #3d6b3d;
+  --green-light: #4a7c4a;
+  --red: #c0392b;
+  --red-light: #e74c3c;
+  --cream: #f5f0e8;
+  --cream-dark: #e8e0d0;
+  --text: #f0ece4;
+  --text-muted: #8a9e8a;
+  --border: rgba(255,255,255,0.08);
+  --gold: #c9a84c;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--green-deep);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,107,61,0.4) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 90% 90%, rgba(192,57,43,0.08) 0%, transparent 50%),
+    var(--green-deep);
+}
+
+/* TOP BAR */
+.topbar {
+  padding: calc(var(--safe-top) + 16px) 20px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: rgba(26,46,26,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.logo-text .ex { color: var(--red); }
+.logo-text .heart { color: var(--red); font-size: 14px; }
+.logo-text .animo { color: #4a7c4a; }
+.logo-text .sub {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  margin-top: -2px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf78;
+  box-shadow: 0 0 8px rgba(76,175,120,0.6);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* SCROLL AREA */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 calc(var(--safe-bottom) + 100px);
+}
+
+.scroll-area::-webkit-scrollbar { display: none; }
+
+/* HERO */
+.hero {
+  padding: 28px 20px 20px;
+  text-align: center;
+}
+
+.hero-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--green-light);
+}
+
+.hero-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* CARD */
+.card {
+  margin: 0 16px 16px;
+  background: rgba(45,74,45,0.3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.card-header {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-header-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(74,124,74,0.3);
+  border: 1px solid rgba(74,124,74,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.card-header-text h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.card-header-text p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.card-body { padding: 16px 18px; }
+
+/* DOC TYPE SELECT */
+.doc-select-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.doc-option {
+  position: relative;
+}
+
+.doc-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.doc-option label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.doc-option label .opt-icon { font-size: 22px; }
+.doc-option label .opt-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.doc-option input:checked + label {
+  border-color: var(--green-light);
+  background: rgba(74,124,74,0.2);
+}
+
+.doc-option input:checked + label .opt-text {
+  color: var(--text);
+}
+
+/* DIVIDER */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.section-divider span {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* CAMERA ZONE */
+.camera-zone {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+  border: 2px dashed rgba(255,255,255,0.1);
+  aspect-ratio: 3/2;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+}
+
+.camera-zone.has-image {
+  border-style: solid;
+  border-color: rgba(74,124,74,0.5);
+}
+
+.camera-zone:active { transform: scale(0.98); }
+
+.zone-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.zone-icon-wrap {
+  position: relative;
+}
+
+.zone-icon-bg {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(74,124,74,0.15);
+  border: 1px solid rgba(74,124,74,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.zone-btn-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.zone-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zone-btn.camera { border-color: rgba(74,124,74,0.4); color: #4a7c4a; }
+.zone-btn.gallery { border-color: rgba(201,168,76,0.3); color: var(--gold); }
+
+.zone-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.zone-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  display: none;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.zone-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* BACK SECTION */
+#backSection {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+#backSection.visible {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* TIP */
+.tip-box {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(201,168,76,0.05);
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.tip-box .tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.tip-box p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+/* BOTTOM AREA */
+.bottom-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px calc(var(--safe-bottom) + 12px);
+  background: linear-gradient(to top, rgba(26,46,26,0.98) 70%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--green-accent), var(--green-light));
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(61,107,61,0.4);
+}
+
+.submit-btn:active:not(:disabled) { transform: scale(0.98); }
+.submit-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* STATUS */
+.status-wrap {
+  margin-top: 10px;
+}
+
+.status-box {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+}
+
+.status-box.loading {
+  display: flex;
+  background: rgba(74,124,74,0.1);
+  border: 1px solid rgba(74,124,74,0.2);
+  color: #4a7c4a;
+}
+.status-box.success {
+  display: flex;
+  background: rgba(76,175,120,0.1);
+  border: 1px solid rgba(76,175,120,0.2);
+  color: #4caf78;
+}
+.status-box.error {
+  display: flex;
+  background: rgba(192,57,43,0.1);
+  border: 1px solid rgba(192,57,43,0.2);
+  color: var(--red-light);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(74,124,74,0.2);
+  border-top-color: #4a7c4a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* SUCCESS OVERLAY */
+.success-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,20,10,0.92);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.success-overlay.show { display: flex; }
+
+.success-card {
+  background: linear-gradient(135deg, rgba(45,74,45,0.9), rgba(26,46,26,0.9));
+  border: 1px solid rgba(74,124,74,0.3);
+  border-radius: 28px;
+  padding: 40px 32px;
+  text-align: center;
+  max-width: 320px;
+  width: calc(100% - 48px);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+
+.success-icon-wrap {
+  width: 80px;
+  height: 80px;
+  background: rgba(76,175,120,0.15);
+  border: 2px solid rgba(76,175,120,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 20px;
+  animation: scaleIn 0.4s ease;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.success-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.success-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.success-new-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--green-accent), var(--green-light));
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+}
+
+/* INSTALL BANNER */
+.install-banner {
+  margin: 0 16px 16px;
+  padding: 14px 16px;
+  background: rgba(201,168,76,0.07);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-banner .ib-icon { font-size: 22px; flex-shrink: 0; }
+.install-banner .ib-text { flex: 1; }
+.install-banner .ib-text p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.install-banner .ib-text strong { font-size: 13px; color: var(--gold); display: block; margin-bottom: 2px; }
+.install-banner .ib-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+/* HIDDEN INPUTS */
+input[type="file"] { display: none !important; }
+
+/* Animate in */
+.card { animation: fadeUp 0.4s ease both; }
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo-wrap">
+    <div class="logo-text">
+      <span class="ex">ex</span><span class="heart">♥</span><span class="animo">animo</span>
+      <span class="sub">Prijava gostiju</span>
+    </div>
+  </div>
+  <div class="status-dot" title="Sistem aktivan"></div>
+</div>
+
+<!-- SCROLL AREA -->
+<div class="scroll-area">
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-label">Automatska prijava</p>
+    <h1 class="hero-title">Fotografišite<br><em>dokument gosta</em></h1>
+    <p class="hero-desc">AI sistem automatski čita podatke<br>i popunjava prijavu</p>
+  </div>
+
+  <!-- CARD 1: DOC TYPE -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-icon">🪪</div>
+      <div class="card-header-text">
+        <h3>Tip dokumenta</h3>
+        <p>Izaberite vrstu dokumenta gosta</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="doc-select-wrap">
+        <div class="doc-option">
+          <input type="radio" name="docType" id="optPassport" value="passport" checked>
+          <label for="optPassport">
+            <span class="opt-icon">📘</span>
+            <span class="opt-text">Pasoš</span>
+          </label>
+        </div>
+        <div class="doc-option">
+          <input type="radio" name="docType" id="optIdCard" value="id_card">
+          <label for="optIdCard">
+            <span class="opt-icon">🪪</span>
+            <span class="opt-text">Lična karta</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: IMAGES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-icon">📷</div>
+      <div class="card-header-text">
+        <h3>Fotografija dokumenta</h3>
+        <p>Sva četiri ugla moraju biti vidljiva</p>
+      </div>
+    </div>
+    <div class="card-body">
+
+      <div class="tip-box">
+        <span class="tip-icon">💡</span>
+        <p>Postavite dokument na ravnu površinu, obezbedite dobro osvetljenje i fotografišite iz neposredne blizine.</p>
+      </div>
+
+      <!-- FRONT -->
+      <div class="section-divider"><span>Prednja strana</span></div>
+
+      <div class="camera-zone" id="zoneFront" onclick="handleZoneClick('front', event)">
+        <div class="zone-placeholder" id="placeholderFront">
+          <div class="zone-icon-wrap">
+            <div class="zone-icon-bg">📷</div>
+          </div>
+          <div class="zone-btn-row">
+            <button class="zone-btn camera" onclick="openCamera('front', event)">📷 Kamera</button>
+            <button class="zone-btn gallery" onclick="openGallery('front', event)">🖼 Galerija</button>
+          </div>
+        </div>
+        <img class="zone-preview" id="previewFront" alt="Prednja strana">
+        <button class="zone-remove" id="removeFront" onclick="removeImage('front', event)">✕ Ukloni</button>
+      </div>
+
+      <!-- BACK (LK only) -->
+      <div id="backSection">
+        <div class="section-divider"><span>Zadnja strana</span></div>
+        <div class="camera-zone" id="zoneBack" onclick="handleZoneClick('back', event)">
+          <div class="zone-placeholder" id="placeholderBack">
+            <div class="zone-icon-wrap">
+              <div class="zone-icon-bg">📷</div>
+            </div>
+            <div class="zone-btn-row">
+              <button class="zone-btn camera" onclick="openCamera('back', event)">📷 Kamera</button>
+              <button class="zone-btn gallery" onclick="openGallery('back', event)">🖼 Galerija</button>
+            </div>
+          </div>
+          <img class="zone-preview" id="previewBack" alt="Zadnja strana">
+          <button class="zone-remove" id="removeBack" onclick="removeImage('back', event)">✕ Ukloni</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INSTALL BANNER -->
+  <div class="install-banner" id="installBanner" style="display:none">
+    <span class="ib-icon">📲</span>
+    <div class="ib-text">
+      <strong>Dodaj na početni ekran</strong>
+      <p>Koristi aplikaciju kao pravu app bez browsera</p>
+    </div>
+    <button class="ib-close" onclick="dismissInstall()">✕</button>
+  </div>
+
+</div>
+
+<!-- BOTTOM SUBMIT -->
+<div class="bottom-area">
+  <button class="submit-btn" id="submitBtn" disabled onclick="submitForm()">
+    <span>📤</span> Prijavi gosta
+  </button>
+  <div class="status-wrap">
+    <div class="status-box" id="statusBox"></div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon-wrap">✅</div>
+    <h2>Prijava uspešna!</h2>
+    <p>Podaci gosta su uspešno poslati na obradu. Forma će se automatski popuniti.</p>
+    <button class="success-new-btn" onclick="resetForm()">Nova prijava</button>
+  </div>
+</div>
+
+<!-- HIDDEN FILE INPUTS -->
+<input type="file" id="cameraFront" accept="image/*" capture="environment" onchange="handleFile(event,'front')">
+<input type="file" id="galleryFront" accept="image/*" onchange="handleFile(event,'front')">
+<input type="file" id="cameraBack" accept="image/*" capture="environment" onchange="handleFile(event,'back')">
+<input type="file" id="galleryBack" accept="image/*" onchange="handleFile(event,'back')">
+
+<script>
+const WEBHOOK_URL = 'https://hook.eu1.make.com/kf7t8vl5bhtu5stseu50aeb69sjdojfh';
+
+let frontFile = null;
+let backFile = null;
+
+// DOC TYPE CHANGE
+document.querySelectorAll('input[name="docType"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const backSection = document.getElementById('backSection');
+    if (this.value === 'id_card') {
+      backSection.classList.add('visible');
+    } else {
+      backSection.classList.remove('visible');
+      backFile = null;
+      resetZone('back');
+    }
+    checkSubmit();
+  });
+});
+
+// ZONE CLICK — if no image, do nothing (buttons handle it)
+function handleZoneClick(side, e) {
+  // Only if clicking zone itself (not buttons)
+  if (e.target.closest('.zone-btn') || e.target.closest('.zone-remove')) return;
+  const preview = document.getElementById('preview' + (side === 'front' ? 'Front' : 'Back'));
+  if (preview.style.display !== 'block') {
+    openCamera(side, e);
+  }
+}
+
+function openCamera(side, e) {
+  e.stopPropagation();
+  document.getElementById('camera' + (side === 'front' ? 'Front' : 'Back')).click();
+}
+
+function openGallery(side, e) {
+  e.stopPropagation();
+  document.getElementById('gallery' + (side === 'front' ? 'Front' : 'Back')).click();
+}
+
+function handleFile(e, side) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const isFront = side === 'front';
+    if (isFront) frontFile = file;
+    else backFile = file;
+
+    const preview = document.getElementById('preview' + (isFront ? 'Front' : 'Back'));
+    const placeholder = document.getElementById('placeholder' + (isFront ? 'Front' : 'Back'));
+    const remove = document.getElementById('remove' + (isFront ? 'Front' : 'Back'));
+    const zone = document.getElementById('zone' + (isFront ? 'Front' : 'Back'));
+
+    preview.src = ev.target.result;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+    remove.style.display = 'block';
+    zone.classList.add('has-image');
+    checkSubmit();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function removeImage(side, e) {
+  e.stopPropagation();
+  if (side === 'front') frontFile = null;
+  else backFile = null;
+  resetZone(side);
+  checkSubmit();
+}
+
+function resetZone(side) {
+  const isFront = side === 'front';
+  const preview = document.getElementById('preview' + (isFront ? 'Front' : 'Back'));
+  const placeholder = document.getElementById('placeholder' + (isFront ? 'Front' : 'Back'));
+  const remove = document.getElementById('remove' + (isFront ? 'Front' : 'Back'));
+  const zone = document.getElementById('zone' + (isFront ? 'Front' : 'Back'));
+  preview.style.display = 'none';
+  preview.src = '';
+  placeholder.style.display = 'flex';
+  remove.style.display = 'none';
+  zone.classList.remove('has-image');
+}
+
+function checkSubmit() {
+  const type = document.querySelector('input[name="docType"]:checked').value;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = type === 'passport' ? !frontFile : !(frontFile && backFile);
+}
+
+function showStatus(type, msg) {
+  const el = document.getElementById('statusBox');
+  el.className = 'status-box ' + type;
+  if (type === 'loading') {
+    el.innerHTML = '<div class="spinner"></div><span>' + msg + '</span>';
+  } else {
+    const icon = type === 'success' ? '✅' : '❌';
+    el.innerHTML = '<span>' + icon + '</span><span>' + msg + '</span>';
+  }
+}
+
+function hideStatus() {
+  document.getElementById('statusBox').className = 'status-box';
+}
+
+function toBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.readAsDataURL(file);
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+  });
+}
+
+async function submitForm() {
+  const type = document.querySelector('input[name="docType"]:checked').value;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  showStatus('loading', 'Slanje podataka...');
+
+  try {
+    const frontBase64 = await toBase64(frontFile);
+    let payload = {
+      document_type: type,
+      images: { front: frontBase64 },
+      metadata: { timestamp: new Date().toISOString(), source: 'ExanimoPrijava' }
+    };
+    if (type === 'id_card') {
+      payload.images.back = await toBase64(backFile);
+    }
+
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      document.getElementById('successOverlay').classList.add('show');
+      hideStatus();
+    } else {
+      throw new Error('Server greška: ' + response.status);
+    }
+  } catch (err) {
+    showStatus('error', 'Greška pri slanju. Pokušajte ponovo.');
+    btn.disabled = false;
+    console.error(err);
+  }
+}
+
+function resetForm() {
+  document.getElementById('successOverlay').classList.remove('show');
+  frontFile = null;
+  backFile = null;
+  resetZone('front');
+  resetZone('back');
+  document.getElementById('optPassport').checked = true;
+  document.getElementById('backSection').classList.remove('visible');
+  checkSubmit();
+  hideStatus();
+}
+
+// PWA Install
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+
+document.getElementById('installBanner').addEventListener('click', async (e) => {
+  if (e.target.closest('.ib-close')) return;
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('installBanner').style.display = 'none';
+  }
+});
+
+function dismissInstall() {
+  document.getElementById('installBanner').style.display = 'none';
+}
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register("/app/sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
