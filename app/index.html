@@ -758,12 +758,8 @@ document.querySelectorAll('input[name="docType"]').forEach(radio => {
 
 // ZONE CLICK — if no image, do nothing (buttons handle it)
 function handleZoneClick(side, e) {
-  // Only if clicking zone itself (not buttons)
-  if (e.target.closest('.zone-btn') || e.target.closest('.zone-remove')) return;
-  const preview = document.getElementById('preview' + (side === 'front' ? 'Front' : 'Back'));
-  if (preview.style.display !== 'block') {
-    openCamera(side, e);
-  }
+  // Ne radi ništa — dugmad sama handle-uju klikove
+  return;
 }
 
 function openCamera(side, e) {
