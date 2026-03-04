@@ -668,8 +668,8 @@ input[type="file"] { display: none !important; }
             <div class="zone-icon-bg">📷</div>
           </div>
           <div class="zone-btn-row">
-            <button class="zone-btn camera" onclick="openCamera('front', event)">📷 Kamera</button>
-            <button class="zone-btn gallery" onclick="openGallery('front', event)">🖼 Galerija</button>
+            <button class="zone-btn camera" onclick="document.getElementById('cameraFront').click()">📷 Kamera</button>
+            <button class="zone-btn gallery" onclick="document.getElementById('galleryFront').click()">🖼 Galerija</button>
           </div>
         </div>
         <img class="zone-preview" id="previewFront" alt="Prednja strana">
@@ -685,8 +685,8 @@ input[type="file"] { display: none !important; }
               <div class="zone-icon-bg">📷</div>
             </div>
             <div class="zone-btn-row">
-              <button class="zone-btn camera" onclick="openCamera('back', event)">📷 Kamera</button>
-              <button class="zone-btn gallery" onclick="openGallery('back', event)">🖼 Galerija</button>
+              <button class="zone-btn camera" onclick="document.getElementById('cameraBack').click()">📷 Kamera</button>
+              <button class="zone-btn gallery" onclick="document.getElementById('galleryBack').click()">🖼 Galerija</button>
             </div>
           </div>
           <img class="zone-preview" id="previewBack" alt="Zadnja strana">
@@ -758,8 +758,12 @@ document.querySelectorAll('input[name="docType"]').forEach(radio => {
 
 // ZONE CLICK — if no image, do nothing (buttons handle it)
 function handleZoneClick(side, e) {
-  // Ne radi ništa — dugmad sama handle-uju klikove
-  return;
+  // Only if clicking zone itself (not buttons)
+  if (e.target.closest('.zone-btn') || e.target.closest('.zone-remove')) return;
+  const preview = document.getElementById('preview' + (side === 'front' ? 'Front' : 'Back'));
+  if (preview.style.display !== 'block') {
+    openCamera(side, e);
+  }
 }
 
 function openCamera(side, e) {
