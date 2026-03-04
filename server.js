@@ -42,3 +42,26 @@ app.post('/confirm', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server na portu ${PORT}`));
+let lastError = null;
+
+app.post('/image-error', (req, res) => {
+  lastError = { 
+    message: req.body.message || 'Nečitljiva slika',
+    timestamp: new Date().toISOString()
+  };
+  res.json({ status: 'ok' });
+});
+
+app.get('/check-error', (req, res) => {
+  const clientTime = req.query.since;
+  if (!lastError) return res.json({ hasError: false });
+  if (clientTime && new Date(lastError.timestamp) <= new Date(clientTime)) {
+    return res.json({ hasError: false });
+  }
+  res.json({ hasError: true, message: lastError.message, timestamp: lastError.timestamp });
+});
+
+app.post('/clear-error', (req, res) => {
+  lastError = null;
+  res.json({ status: 'cleared' });
+});
