@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#1a2e1a">
+<meta name="theme-color" content="#0a1612">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Exanimo Prijava">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="/app/manifest.json">
-<link rel="apple-touch-icon" href="/app/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/app/icon-192.png">
 <title>Exanimo Prijava</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green-deep: #1a2e1a;
-  --green-mid: #2d4a2d;
-  --green-accent: #3d6b3d;
-  --green-light: #4a7c4a;
-  --red: #c0392b;
-  --red-light: #e74c3c;
-  --cream: #f5f0e8;
-  --cream-dark: #e8e0d0;
-  --text: #f0ece4;
-  --text-muted: #8a9e8a;
-  --border: rgba(255,255,255,0.08);
-  --gold: #c9a84c;
+  --bg: #0a1612;
+  --green-deep: #1E503E;
+  --green-mid: #285343;
+  --green-card: rgba(40, 83, 67, 0.15);
+  --gold: #D4A574;
+  --gold-dim: rgba(212, 165, 116, 0.15);
+  --gold-border: rgba(212, 165, 116, 0.15);
+  --text: #f8f9f7;
+  --text-60: rgba(248, 249, 247, 0.6);
+  --text-40: rgba(248, 249, 247, 0.4);
+  --text-30: rgba(248, 249, 247, 0.3);
+  --border: rgba(212, 165, 116, 0.12);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -34,8 +34,8 @@
 
 html, body {
   height: 100%;
+  background: var(--bg);
   overflow: hidden;
-  background: var(--green-deep);
 }
 
 body {
@@ -46,59 +46,57 @@ body {
   position: fixed;
   width: 100%;
   height: 100%;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,107,61,0.4) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 90% 90%, rgba(192,57,43,0.08) 0%, transparent 50%),
-    var(--green-deep);
 }
 
-/* TOP BAR */
-.topbar {
-  padding: calc(var(--safe-top) + 16px) 20px 16px;
+/* BG gradient */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(40,83,67,0.2) 0%, transparent 40%, rgba(30,80,62,0.3) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HEADER */
+header {
+  position: relative;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: calc(var(--safe-top) + 20px) 24px 20px;
   flex-shrink: 0;
-  border-bottom: 1px solid var(--border);
-  background: rgba(26,46,26,0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
 }
 
-.logo-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.logo-text {
+.logo {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.5px;
+  line-height: 1;
 }
+.logo .ex { color: #c0392b; }
+.logo .heart { color: #c0392b; font-size: 16px; }
+.logo .animo { color: #4a9b6f; }
 
-.logo-text .ex { color: var(--red); }
-.logo-text .heart { color: var(--red); font-size: 14px; }
-.logo-text .animo { color: #4a7c4a; }
-.logo-text .sub {
-  display: block;
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  font-family: 'DM Sans', sans-serif;
-  margin-top: -2px;
+.online-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-
-.status-dot {
-  width: 8px;
-  height: 8px;
+.online-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #4caf78;
-  box-shadow: 0 0 8px rgba(76,175,120,0.6);
+  background: #008000;
+  box-shadow: 0 0 10px rgba(0,128,0,0.6);
   animation: pulse 2s infinite;
+}
+.online-text {
+  font-size: 13px;
+  color: #008000;
+  font-weight: 500;
 }
 
 @keyframes pulse {
@@ -106,188 +104,155 @@ body {
   50% { opacity: 0.6; transform: scale(0.85); }
 }
 
-/* SCROLL AREA */
+/* SCROLL */
 .scroll-area {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 0 0 calc(var(--safe-bottom) + 100px);
+  position: relative;
+  z-index: 1;
+  padding-bottom: calc(var(--safe-bottom) + 110px);
 }
-
 .scroll-area::-webkit-scrollbar { display: none; }
 
 /* HERO */
 .hero {
-  padding: 28px 20px 20px;
-  text-align: center;
+  padding: 8px 24px 24px;
 }
 
-.hero-label {
-  font-size: 10px;
-  letter-spacing: 3px;
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(40,83,67,0.3);
+  border: 1px solid rgba(212,165,116,0.2);
+  margin-bottom: 16px;
+}
+.hero-badge span {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 8px;
+  color: var(--gold);
 }
 
-.hero-title {
+.hero h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 600;
   color: var(--text);
   line-height: 1.15;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-.hero-title em {
-  font-style: italic;
-  color: var(--green-light);
-}
-
-.hero-desc {
-  font-size: 13px;
-  color: var(--text-muted);
+.hero p {
+  font-size: 15px;
+  color: var(--text-60);
   line-height: 1.6;
 }
 
-/* CARD */
+/* CARDS */
 .card {
   margin: 0 16px 16px;
-  background: rgba(45,74,45,0.3);
-  border: 1px solid var(--border);
+  padding: 20px;
   border-radius: 20px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
+  background: var(--green-card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
-.card-header {
-  padding: 16px 18px 14px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.card-header-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: rgba(74,124,74,0.3);
-  border: 1px solid rgba(74,124,74,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-.card-header-text h3 {
-  font-size: 14px;
+.card-label {
+  display: block;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text);
+  margin-bottom: 14px;
 }
 
-.card-header-text p {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 1px;
-}
-
-.card-body { padding: 16px 18px; }
-
-/* DOC TYPE SELECT */
-.doc-select-wrap {
+/* DOC TYPE */
+.doc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 4px;
 }
 
-.doc-option {
+.doc-btn {
   position: relative;
-}
-
-.doc-option input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.doc-option label {
+  padding: 16px 12px;
+  border-radius: 16px;
+  border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 14px 10px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
+  gap: 10px;
   cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-}
-
-.doc-option label .opt-icon { font-size: 22px; }
-.doc-option label .opt-text {
-  font-size: 12px;
-  color: var(--text-muted);
+  transition: all 0.25s ease;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
   font-weight: 500;
 }
 
-.doc-option input:checked + label {
-  border-color: var(--green-light);
-  background: rgba(74,124,74,0.2);
+.doc-btn.active {
+  background: var(--gold);
+  color: #0a1612;
+  box-shadow: 0 8px 24px rgba(212,165,116,0.35);
 }
 
-.doc-option input:checked + label .opt-text {
-  color: var(--text);
+.doc-btn.inactive {
+  background: rgba(40,83,67,0.35);
+  color: var(--text-60);
+}
+
+.doc-btn svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 /* DIVIDER */
-.section-divider {
+.divider {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 16px 0 12px;
+  margin: 18px 0 14px;
 }
-
-.section-divider span {
-  font-size: 10px;
-  letter-spacing: 2px;
+.divider span {
+  font-size: 11px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-40);
   white-space: nowrap;
 }
-
-.section-divider::before,
-.section-divider::after {
+.divider::before,
+.divider::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--border);
+  background: rgba(212,165,116,0.1);
 }
 
 /* CAMERA ZONE */
 .camera-zone {
   position: relative;
+  aspect-ratio: 5/3;
   border-radius: 16px;
+  background: rgba(30,80,62,0.4);
+  border: 2px dashed rgba(212,165,116,0.3);
   overflow: hidden;
-  background: rgba(0,0,0,0.3);
-  border: 2px dashed rgba(255,255,255,0.1);
-  aspect-ratio: 3/2;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 10px;
+  transition: border-color 0.2s, transform 0.15s;
+  margin-bottom: 6px;
 }
 
 .camera-zone.has-image {
   border-style: solid;
-  border-color: rgba(74,124,74,0.5);
+  border-color: rgba(212,165,116,0.5);
 }
 
-.camera-zone:active { transform: scale(0.98); }
+.camera-zone:active { transform: scale(0.99); }
 
 .zone-placeholder {
   position: absolute;
@@ -296,49 +261,51 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  pointer-events: none;
+  gap: 16px;
 }
 
-.zone-icon-wrap {
-  position: relative;
+.zone-hint {
+  font-size: 13px;
+  color: var(--text-40);
 }
 
-.zone-icon-bg {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: rgba(74,124,74,0.15);
-  border: 1px solid rgba(74,124,74,0.3);
+.zone-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.zone-btn-cam, .zone-btn-gal {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-}
-
-.zone-btn-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.zone-btn {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.06);
-  color: var(--text-muted);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  transition: all 0.2s;
 }
 
-.zone-btn.camera { border-color: rgba(74,124,74,0.4); color: #4a7c4a; }
-.zone-btn.gallery { border-color: rgba(201,168,76,0.3); color: var(--gold); }
+.zone-btn-cam {
+  background: var(--gold);
+  color: #0a1612;
+  box-shadow: 0 4px 16px rgba(212,165,116,0.4);
+}
+
+.zone-btn-cam:active { transform: scale(0.92); }
+
+.zone-btn-gal {
+  background: var(--green-mid);
+  color: var(--text);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.zone-btn-gal:active { transform: scale(0.92); }
+
+.zone-btn-cam svg, .zone-btn-gal svg {
+  width: 24px;
+  height: 24px;
+}
 
 .zone-preview {
   width: 100%;
@@ -349,26 +316,20 @@ body {
 
 .zone-remove {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0,0,0,0.7);
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.15);
   color: white;
-  border-radius: 20px;
-  padding: 4px 10px;
-  font-size: 11px;
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
   display: none;
+  font-family: 'DM Sans', sans-serif;
   z-index: 2;
-  backdrop-filter: blur(4px);
-}
-
-.zone-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  text-align: center;
-  margin-bottom: 12px;
 }
 
 /* BACK SECTION */
@@ -379,102 +340,101 @@ body {
   transition: max-height 0.4s ease, opacity 0.3s ease;
 }
 #backSection.visible {
-  max-height: 500px;
+  max-height: 600px;
   opacity: 1;
 }
 
 /* TIP */
-.tip-box {
+.tip {
   display: flex;
   gap: 10px;
   padding: 12px 14px;
-  background: rgba(201,168,76,0.05);
-  border: 1px solid rgba(201,168,76,0.1);
+  background: rgba(212,165,116,0.05);
+  border: 1px solid rgba(212,165,116,0.1);
   border-radius: 12px;
-  margin-bottom: 4px;
+  margin-top: 14px;
 }
-.tip-box .tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-.tip-box p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.tip svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--gold); margin-top: 1px; }
+.tip p { font-size: 12px; color: var(--text-60); line-height: 1.6; }
 
-/* BOTTOM AREA */
-.bottom-area {
+/* BOTTOM */
+.bottom-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 16px calc(var(--safe-bottom) + 12px);
-  background: linear-gradient(to top, rgba(26,46,26,0.98) 70%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  z-index: 20;
+  padding: 16px 16px calc(var(--safe-bottom) + 16px);
+  background: linear-gradient(to top, #0a1612 60%, transparent);
 }
 
 .submit-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--green-accent), var(--green-light));
-  color: white;
+  padding: 18px;
   border: none;
   border-radius: 18px;
-  padding: 18px;
-  font-size: 15px;
-  font-weight: 500;
   font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  letter-spacing: 0.3px;
-  transition: all 0.2s;
+  transition: all 0.25s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 20px rgba(61,107,61,0.4);
 }
 
-.submit-btn:active:not(:disabled) { transform: scale(0.98); }
+.submit-btn:not(:disabled) {
+  background: var(--gold);
+  color: #0a1612;
+  box-shadow: 0 8px 28px rgba(212,165,116,0.4);
+}
+
+.submit-btn:not(:disabled):active { transform: scale(0.97); }
+
 .submit-btn:disabled {
-  opacity: 0.35;
+  background: rgba(40,83,67,0.35);
+  color: var(--text-30);
   cursor: not-allowed;
   box-shadow: none;
 }
 
 /* STATUS */
-.status-wrap {
-  margin-top: 10px;
-}
-
+.status-wrap { margin-top: 10px; }
 .status-box {
   display: none;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
+  padding: 11px 16px;
   border-radius: 14px;
   font-size: 13px;
 }
-
 .status-box.loading {
   display: flex;
-  background: rgba(74,124,74,0.1);
-  border: 1px solid rgba(74,124,74,0.2);
-  color: #4a7c4a;
+  background: rgba(40,83,67,0.2);
+  border: 1px solid rgba(40,83,67,0.4);
+  color: #4a9b6f;
 }
 .status-box.success {
   display: flex;
   background: rgba(76,175,120,0.1);
-  border: 1px solid rgba(76,175,120,0.2);
+  border: 1px solid rgba(76,175,120,0.25);
   color: #4caf78;
 }
 .status-box.error {
   display: flex;
   background: rgba(192,57,43,0.1);
-  border: 1px solid rgba(192,57,43,0.2);
-  color: var(--red-light);
+  border: 1px solid rgba(192,57,43,0.25);
+  color: #e74c3c;
 }
 
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(74,124,74,0.2);
-  border-top-color: #4a7c4a;
+  border: 2px solid rgba(74,155,111,0.25);
+  border-top-color: #4a9b6f;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 0.75s linear infinite;
   flex-shrink: 0;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -484,235 +444,206 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(10,20,10,0.92);
   z-index: 100;
+  background: rgba(10,22,18,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  padding: 24px;
 }
 .success-overlay.show { display: flex; }
 
 .success-card {
-  background: linear-gradient(135deg, rgba(45,74,45,0.9), rgba(26,46,26,0.9));
-  border: 1px solid rgba(74,124,74,0.3);
+  width: 100%;
+  max-width: 340px;
+  background: linear-gradient(145deg, rgba(40,83,67,0.5), rgba(10,22,18,0.8));
+  border: 1px solid rgba(212,165,116,0.2);
   border-radius: 28px;
-  padding: 40px 32px;
+  padding: 40px 28px;
   text-align: center;
-  max-width: 320px;
-  width: calc(100% - 48px);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.success-icon-wrap {
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.success-icon {
   width: 80px;
   height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
   background: rgba(76,175,120,0.15);
   border: 2px solid rgba(76,175,120,0.3);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  margin: 0 auto 20px;
-  animation: scaleIn 0.4s ease;
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
 }
 
 .success-card h2 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 600;
-  color: var(--text);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .success-card p {
-  font-size: 13px;
-  color: var(--text-muted);
+  font-size: 14px;
+  color: var(--text-60);
   line-height: 1.6;
   margin-bottom: 28px;
 }
 
 .success-new-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--green-accent), var(--green-light));
-  color: white;
-  border: none;
-  border-radius: 14px;
   padding: 16px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-}
-
-/* INSTALL BANNER */
-.install-banner {
-  margin: 0 16px 16px;
-  padding: 14px 16px;
-  background: rgba(201,168,76,0.07);
-  border: 1px solid rgba(201,168,76,0.15);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.install-banner .ib-icon { font-size: 22px; flex-shrink: 0; }
-.install-banner .ib-text { flex: 1; }
-.install-banner .ib-text p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-.install-banner .ib-text strong { font-size: 13px; color: var(--gold); display: block; margin-bottom: 2px; }
-.install-banner .ib-close {
-  background: none;
+  background: var(--gold);
+  color: #0a1612;
   border: none;
-  color: var(--text-muted);
-  font-size: 18px;
+  border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  padding: 4px;
-  flex-shrink: 0;
+  transition: all 0.2s;
 }
+.success-new-btn:active { transform: scale(0.97); }
 
-/* HIDDEN INPUTS */
+/* Hidden inputs */
 input[type="file"] { display: none !important; }
 
-/* Animate in */
-.card { animation: fadeUp 0.4s ease both; }
-.card:nth-child(1) { animation-delay: 0.05s; }
-.card:nth-child(2) { animation-delay: 0.1s; }
-
+/* Fade in animation */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+.hero { animation: fadeUp 0.4s ease both 0.05s; }
+.card:nth-child(1) { animation: fadeUp 0.4s ease both 0.1s; }
+.card:nth-child(2) { animation: fadeUp 0.4s ease both 0.15s; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="logo-wrap">
-    <div class="logo-text">
-      <span class="ex">ex</span><span class="heart">♥</span><span class="animo">animo</span>
-      <span class="sub">Prijava gostiju</span>
-    </div>
+<div class="bg-gradient"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <span class="ex">ex</span><span class="heart">♥</span><span class="animo">animo</span>
   </div>
-  <div class="status-dot" title="Sistem aktivan"></div>
-</div>
+  <div class="online-badge">
+    <div class="online-dot"></div>
+    <span class="online-text">Online</span>
+  </div>
+</header>
 
 <!-- SCROLL AREA -->
 <div class="scroll-area">
 
   <!-- HERO -->
   <div class="hero">
-    <p class="hero-label">Automatska prijava</p>
-    <h1 class="hero-title">Fotografišite<br><em>dokument gosta</em></h1>
-    <p class="hero-desc">AI sistem automatski čita podatke<br>i popunjava prijavu</p>
+    <div class="hero-badge"><span>Automatska prijava</span></div>
+    <h1>Dobrodošli u<br>Exanimo<br><em>prijavu</em></h1>
+    <p>Fotografišite dokument gosta za<br>automatsku registraciju</p>
   </div>
 
   <!-- CARD 1: DOC TYPE -->
   <div class="card">
-    <div class="card-header">
-      <div class="card-header-icon">🪪</div>
-      <div class="card-header-text">
-        <h3>Tip dokumenta</h3>
-        <p>Izaberite vrstu dokumenta gosta</p>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="doc-select-wrap">
-        <div class="doc-option">
-          <input type="radio" name="docType" id="optPassport" value="passport" checked>
-          <label for="optPassport">
-            <span class="opt-icon">📘</span>
-            <span class="opt-text">Pasoš</span>
-          </label>
-        </div>
-        <div class="doc-option">
-          <input type="radio" name="docType" id="optIdCard" value="id_card">
-          <label for="optIdCard">
-            <span class="opt-icon">🪪</span>
-            <span class="opt-text">Lična karta</span>
-          </label>
-        </div>
-      </div>
+    <span class="card-label">Tip dokumenta</span>
+    <div class="doc-grid">
+      <button class="doc-btn active" id="btnPassport" onclick="selectDoc('passport')">
+        <!-- Book/Passport icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+        </svg>
+        Pasoš
+      </button>
+      <button class="doc-btn inactive" id="btnIdCard" onclick="selectDoc('id_card')">
+        <!-- Credit card icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>
+        </svg>
+        Lična karta
+      </button>
     </div>
   </div>
 
-  <!-- CARD 2: IMAGES -->
+  <!-- CARD 2: PHOTO -->
   <div class="card">
-    <div class="card-header">
-      <div class="card-header-icon">📷</div>
-      <div class="card-header-text">
-        <h3>Fotografija dokumenta</h3>
-        <p>Sva četiri ugla moraju biti vidljiva</p>
-      </div>
-    </div>
-    <div class="card-body">
+    <span class="card-label">Fotografija dokumenta</span>
 
-      <div class="tip-box">
-        <span class="tip-icon">💡</span>
-        <p>Postavite dokument na ravnu površinu, obezbedite dobro osvetljenje i fotografišite iz neposredne blizine.</p>
-      </div>
-
-      <!-- FRONT -->
-      <div class="section-divider"><span>Prednja strana</span></div>
-
-      <div class="camera-zone" id="zoneFront" onclick="handleZoneClick('front', event)">
-        <div class="zone-placeholder" id="placeholderFront">
-          <div class="zone-icon-wrap">
-            <div class="zone-icon-bg">📷</div>
-          </div>
-          <div class="zone-btn-row">
-            <button class="zone-btn camera" onclick="document.getElementById('cameraFront').click()">📷 Kamera</button>
-            <button class="zone-btn gallery" onclick="document.getElementById('galleryFront').click()">🖼 Galerija</button>
-          </div>
+    <!-- FRONT -->
+    <div class="camera-zone" id="zoneFront">
+      <div class="zone-placeholder" id="placeholderFront">
+        <div class="zone-buttons">
+          <button class="zone-btn-cam" onclick="document.getElementById('cameraFront').click()" title="Otvori kameru">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+              <circle cx="12" cy="13" r="3"/>
+            </svg>
+          </button>
+          <button class="zone-btn-gal" onclick="document.getElementById('galleryFront').click()" title="Otvori galeriju">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+              <circle cx="9" cy="9" r="2"/>
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+            </svg>
+          </button>
         </div>
-        <img class="zone-preview" id="previewFront" alt="Prednja strana">
-        <button class="zone-remove" id="removeFront" onclick="removeImage('front', event)">✕ Ukloni</button>
+        <p class="zone-hint">Kamera ili Galerija</p>
       </div>
+      <img class="zone-preview" id="previewFront" alt="">
+      <button class="zone-remove" id="removeFront" onclick="removeImage('front')">✕ Ukloni</button>
+    </div>
 
-      <!-- BACK (LK only) -->
-      <div id="backSection">
-        <div class="section-divider"><span>Zadnja strana</span></div>
-        <div class="camera-zone" id="zoneBack" onclick="handleZoneClick('back', event)">
-          <div class="zone-placeholder" id="placeholderBack">
-            <div class="zone-icon-wrap">
-              <div class="zone-icon-bg">📷</div>
-            </div>
-            <div class="zone-btn-row">
-              <button class="zone-btn camera" onclick="document.getElementById('cameraBack').click()">📷 Kamera</button>
-              <button class="zone-btn gallery" onclick="document.getElementById('galleryBack').click()">🖼 Galerija</button>
-            </div>
+    <!-- BACK SECTION (LK only) -->
+    <div id="backSection">
+      <div class="divider"><span>Zadnja strana</span></div>
+
+      <div class="camera-zone" id="zoneBack">
+        <div class="zone-placeholder" id="placeholderBack">
+          <div class="zone-buttons">
+            <button class="zone-btn-cam" onclick="document.getElementById('cameraBack').click()" title="Otvori kameru">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                <circle cx="12" cy="13" r="3"/>
+              </svg>
+            </button>
+            <button class="zone-btn-gal" onclick="document.getElementById('galleryBack').click()" title="Otvori galeriju">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                <circle cx="9" cy="9" r="2"/>
+                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+              </svg>
+            </button>
           </div>
-          <img class="zone-preview" id="previewBack" alt="Zadnja strana">
-          <button class="zone-remove" id="removeBack" onclick="removeImage('back', event)">✕ Ukloni</button>
+          <p class="zone-hint">Zadnja strana lične karte</p>
         </div>
+        <img class="zone-preview" id="previewBack" alt="">
+        <button class="zone-remove" id="removeBack" onclick="removeImage('back')">✕ Ukloni</button>
       </div>
-
     </div>
-  </div>
 
-  <!-- INSTALL BANNER -->
-  <div class="install-banner" id="installBanner" style="display:none">
-    <span class="ib-icon">📲</span>
-    <div class="ib-text">
-      <strong>Dodaj na početni ekran</strong>
-      <p>Koristi aplikaciju kao pravu app bez browsera</p>
+    <!-- TIP -->
+    <div class="tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+      </svg>
+      <p>Postavite dokument na ravnu površinu. Pobrinite se da su sva četiri ugla vidljiva i tekst oštar.</p>
     </div>
-    <button class="ib-close" onclick="dismissInstall()">✕</button>
+
   </div>
 
 </div>
 
-<!-- BOTTOM SUBMIT -->
-<div class="bottom-area">
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
   <button class="submit-btn" id="submitBtn" disabled onclick="submitForm()">
-    <span>📤</span> Prijavi gosta
+    Prijavi gosta
   </button>
   <div class="status-wrap">
     <div class="status-box" id="statusBox"></div>
@@ -722,7 +653,7 @@ input[type="file"] { display: none !important; }
 <!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-card">
-    <div class="success-icon-wrap">✅</div>
+    <div class="success-icon">✅</div>
     <h2>Prijava uspešna!</h2>
     <p>Podaci gosta su uspešno poslati na obradu. Forma će se automatski popuniti.</p>
     <button class="success-new-btn" onclick="resetForm()">Nova prijava</button>
@@ -740,40 +671,21 @@ const WEBHOOK_URL = 'https://hook.eu1.make.com/kf7t8vl5bhtu5stseu50aeb69sjdojfh'
 
 let frontFile = null;
 let backFile = null;
+let docType = 'passport';
 
-// DOC TYPE CHANGE
-document.querySelectorAll('input[name="docType"]').forEach(radio => {
-  radio.addEventListener('change', function() {
-    const backSection = document.getElementById('backSection');
-    if (this.value === 'id_card') {
-      backSection.classList.add('visible');
-    } else {
-      backSection.classList.remove('visible');
-      backFile = null;
-      resetZone('back');
-    }
-    checkSubmit();
-  });
-});
-
-// ZONE CLICK — if no image, do nothing (buttons handle it)
-function handleZoneClick(side, e) {
-  // Only if clicking zone itself (not buttons)
-  if (e.target.closest('.zone-btn') || e.target.closest('.zone-remove')) return;
-  const preview = document.getElementById('preview' + (side === 'front' ? 'Front' : 'Back'));
-  if (preview.style.display !== 'block') {
-    openCamera(side, e);
+function selectDoc(type) {
+  docType = type;
+  document.getElementById('btnPassport').className = 'doc-btn ' + (type === 'passport' ? 'active' : 'inactive');
+  document.getElementById('btnIdCard').className = 'doc-btn ' + (type === 'id_card' ? 'active' : 'inactive');
+  const back = document.getElementById('backSection');
+  if (type === 'id_card') {
+    back.classList.add('visible');
+  } else {
+    back.classList.remove('visible');
+    backFile = null;
+    resetZone('back');
   }
-}
-
-function openCamera(side, e) {
-  e.stopPropagation();
-  document.getElementById('camera' + (side === 'front' ? 'Front' : 'Back')).click();
-}
-
-function openGallery(side, e) {
-  e.stopPropagation();
-  document.getElementById('gallery' + (side === 'front' ? 'Front' : 'Back')).click();
+  checkSubmit();
 }
 
 function handleFile(e, side) {
@@ -781,28 +693,22 @@ function handleFile(e, side) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = (ev) => {
-    const isFront = side === 'front';
-    if (isFront) frontFile = file;
+    if (side === 'front') frontFile = file;
     else backFile = file;
-
-    const preview = document.getElementById('preview' + (isFront ? 'Front' : 'Back'));
-    const placeholder = document.getElementById('placeholder' + (isFront ? 'Front' : 'Back'));
-    const remove = document.getElementById('remove' + (isFront ? 'Front' : 'Back'));
-    const zone = document.getElementById('zone' + (isFront ? 'Front' : 'Back'));
-
-    preview.src = ev.target.result;
-    preview.style.display = 'block';
-    placeholder.style.display = 'none';
-    remove.style.display = 'block';
-    zone.classList.add('has-image');
+    const isFront = side === 'front';
+    const suffix = isFront ? 'Front' : 'Back';
+    document.getElementById('preview' + suffix).src = ev.target.result;
+    document.getElementById('preview' + suffix).style.display = 'block';
+    document.getElementById('placeholder' + suffix).style.display = 'none';
+    document.getElementById('remove' + suffix).style.display = 'block';
+    document.getElementById('zone' + suffix).classList.add('has-image');
     checkSubmit();
   };
   reader.readAsDataURL(file);
   e.target.value = '';
 }
 
-function removeImage(side, e) {
-  e.stopPropagation();
+function removeImage(side) {
   if (side === 'front') frontFile = null;
   else backFile = null;
   resetZone(side);
@@ -810,33 +716,25 @@ function removeImage(side, e) {
 }
 
 function resetZone(side) {
-  const isFront = side === 'front';
-  const preview = document.getElementById('preview' + (isFront ? 'Front' : 'Back'));
-  const placeholder = document.getElementById('placeholder' + (isFront ? 'Front' : 'Back'));
-  const remove = document.getElementById('remove' + (isFront ? 'Front' : 'Back'));
-  const zone = document.getElementById('zone' + (isFront ? 'Front' : 'Back'));
-  preview.style.display = 'none';
-  preview.src = '';
-  placeholder.style.display = 'flex';
-  remove.style.display = 'none';
-  zone.classList.remove('has-image');
+  const suffix = side === 'front' ? 'Front' : 'Back';
+  document.getElementById('preview' + suffix).style.display = 'none';
+  document.getElementById('preview' + suffix).src = '';
+  document.getElementById('placeholder' + suffix).style.display = 'flex';
+  document.getElementById('remove' + suffix).style.display = 'none';
+  document.getElementById('zone' + suffix).classList.remove('has-image');
 }
 
 function checkSubmit() {
-  const type = document.querySelector('input[name="docType"]:checked').value;
   const btn = document.getElementById('submitBtn');
-  btn.disabled = type === 'passport' ? !frontFile : !(frontFile && backFile);
+  btn.disabled = docType === 'passport' ? !frontFile : !(frontFile && backFile);
 }
 
 function showStatus(type, msg) {
   const el = document.getElementById('statusBox');
   el.className = 'status-box ' + type;
-  if (type === 'loading') {
-    el.innerHTML = '<div class="spinner"></div><span>' + msg + '</span>';
-  } else {
-    const icon = type === 'success' ? '✅' : '❌';
-    el.innerHTML = '<span>' + icon + '</span><span>' + msg + '</span>';
-  }
+  el.innerHTML = type === 'loading'
+    ? '<div class="spinner"></div><span>' + msg + '</span>'
+    : '<span>' + (type === 'success' ? '✅' : '❌') + '</span><span>' + msg + '</span>';
 }
 
 function hideStatus() {
@@ -853,38 +751,32 @@ function toBase64(file) {
 }
 
 async function submitForm() {
-  const type = document.querySelector('input[name="docType"]:checked').value;
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   showStatus('loading', 'Slanje podataka...');
-
   try {
-    const frontBase64 = await toBase64(frontFile);
-    let payload = {
-      document_type: type,
-      images: { front: frontBase64 },
+    const payload = {
+      document_type: docType,
+      images: { front: await toBase64(frontFile) },
       metadata: { timestamp: new Date().toISOString(), source: 'ExanimoPrijava' }
     };
-    if (type === 'id_card') {
+    if (docType === 'id_card') {
       payload.images.back = await toBase64(backFile);
     }
-
-    const response = await fetch(WEBHOOK_URL, {
+    const resp = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
-    if (response.ok) {
-      document.getElementById('successOverlay').classList.add('show');
+    if (resp.ok) {
       hideStatus();
+      document.getElementById('successOverlay').classList.add('show');
     } else {
-      throw new Error('Server greška: ' + response.status);
+      throw new Error('Status: ' + resp.status);
     }
   } catch (err) {
     showStatus('error', 'Greška pri slanju. Pokušajte ponovo.');
     btn.disabled = false;
-    console.error(err);
   }
 }
 
@@ -894,39 +786,12 @@ function resetForm() {
   backFile = null;
   resetZone('front');
   resetZone('back');
-  document.getElementById('optPassport').checked = true;
-  document.getElementById('backSection').classList.remove('visible');
-  checkSubmit();
+  selectDoc('passport');
   hideStatus();
 }
 
-// PWA Install
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBanner').style.display = 'flex';
-});
-
-document.getElementById('installBanner').addEventListener('click', async (e) => {
-  if (e.target.closest('.ib-close')) return;
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const result = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    document.getElementById('installBanner').style.display = 'none';
-  }
-});
-
-function dismissInstall() {
-  document.getElementById('installBanner').style.display = 'none';
-}
-
-// Register service worker
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register("/app/sw.js").catch(() => {});
-  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('/app/sw.js').catch(() => {}));
 }
 </script>
 </body>
